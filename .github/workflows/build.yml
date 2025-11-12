@@ -13,19 +13,18 @@ jobs:
     steps:
       # 1️⃣ Descarga el código del repositorio
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
-      # 2️⃣ Instala el entorno de ESP-IDF (v5.1 estable)
+      # 2️⃣ Instala el entorno de ESP-IDF (versión estable 5.1)
       - name: Set up ESP-IDF
         uses: espressif/esp-idf-ci-action@v1
         with:
           esp_idf_version: release-v5.1
 
-      # 3️⃣ Compila el firmware del badge
+      # 3️⃣ Cambia al directorio correcto y compila
       - name: Build firmware
-        run: |
-          cd firmware
-          idf.py build
+        working-directory: firmware
+        run: idf.py build
 
       # 4️⃣ Sube los binarios compilados como artefactos descargables
       - name: Upload firmware artifact
