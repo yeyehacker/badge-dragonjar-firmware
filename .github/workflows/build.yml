@@ -15,13 +15,13 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      # 2. Configura el entorno ESP-IDF (¡CORRECCIÓN DEFINITIVA!)
+      # 2. Configura el entorno ESP-IDF (¡CORRECCIÓN DEFINITIVA A IDFACTION!)
       - name: Setup ESP-IDF build environment
-        uses: espressif/esp-idf-action@v1 # <--- Este nombre SÍ funciona
+        uses: espressif/idf-action@v1 # <--- Nombre más simple y robusto
         with:
           version: release-v5.1
 
-      # 3. Compila el firmware. El 'working-directory' se encarga de las rutas.
+      # 3. Compila el firmware.
       - name: Build firmware (DragonJAR Badge)
         working-directory: firmware
         run: idf.py build
