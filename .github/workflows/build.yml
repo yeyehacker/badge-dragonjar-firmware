@@ -15,15 +15,15 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      # 2️⃣ Compila firmware usando el contenedor oficial de Espressif
+      # 2️⃣ Compila el firmware usando Espressif IDF
       - name: Build firmware (ESP-IDF)
         uses: espressif/esp-idf-ci-action@v1
         with:
           esp_idf_version: release-v5.1
           target: esp32
-          project_dir: firmware   # 👈 Ruta del CMakeLists.txt
+          path: firmware   # 👈 ESTE es el parámetro correcto (antes era project_dir)
 
-      # 3️⃣ Sube los binarios resultantes
+      # 3️⃣ Sube los binarios generados como artefactos
       - name: Upload firmware artifacts
         uses: actions/upload-artifact@v4
         with:
