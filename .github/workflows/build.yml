@@ -11,23 +11,20 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # 1️⃣ Descarga el código del repositorio
+      # 1️⃣ Descarga el código
       - name: Checkout code
         uses: actions/checkout@v4
 
-      # 2️⃣ Instala el entorno de ESP-IDF (versión estable 5.1)
-      - name: Set up ESP-IDF
+      # 2️⃣ Compila firmware usando el contenedor oficial de Espressif
+      - name: Build firmware (ESP-IDF)
         uses: espressif/esp-idf-ci-action@v1
         with:
           esp_idf_version: release-v5.1
+          target: esp32
+          project_dir: firmware   # 👈 Ruta del CMakeLists.txt
 
-      # 3️⃣ Cambia al directorio correcto y compila
-      - name: Build firmware
-        working-directory: firmware
-        run: idf.py build
-
-      # 4️⃣ Sube los binarios compilados como artefactos descargables
-      - name: Upload firmware artifact
+      # 3️⃣ Sube los binarios resultantes
+      - name: Upload firmware artifacts
         uses: actions/upload-artifact@v4
         with:
           name: dragonjar-firmware-bin
