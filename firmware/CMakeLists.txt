@@ -18,3 +18,4 @@ set(PROJECT_VERSION "${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}.${PROJECT
 
 # ✅ Nombre correcto del proyecto
 project(dragonjar_badge)
+
