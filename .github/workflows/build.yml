@@ -15,12 +15,11 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      # 2. Configura el entorno ESP-IDF (¡CORRECCIÓN DEFINITIVA A setup-esp-idf!)
+      # 2. Configura el entorno ESP-IDF (¡USANDO LA VERSIÓN MÁS BÁSICA 0.1!)
       - name: Setup ESP-IDF build environment
-        uses: espressif/setup-esp-idf@v1 
+        uses: espressif/idf-action@v0.1 # <--- Este nombre y versión deben ser resueltos
         with:
           version: release-v5.1
-          # Aseguramos el target ESP32, ya que es la placa del badge
           target: esp32 
 
       # 3. Compila el firmware.
