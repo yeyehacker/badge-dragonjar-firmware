@@ -1,4 +1,4 @@
-name: Build DragonJAR Badge Firmware
+name: Build DragonJAR Badge Firmware (Manual IDF Setup)
 on:
   push:
     branches: [ main ]
@@ -15,17 +15,29 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      # 2. Configura el entorno ESP-IDF (¡USANDO LA VERSIÓN MÁS BÁSICA 0.1!)
-      - name: Setup ESP-IDF build environment
-        uses: espressif/idf-action@v0.1 # <--- Este nombre y versión deben ser resueltos
-        with:
-          version: release-v5.1
-          target: esp32 
+      # 2. INSTALACIÓN MANUAL A PRUEBA DE FALLOS DE ESP-IDF v5.1.1
+      # Este paso reemplaza a "uses: espressif/idf-action..."
+      - name: Manual Setup and Toolchain Install
+        run: |
+          # Instalar dependencias necesarias
+          sudo apt-get update
+          sudo apt-get install -y git wget flex bison gperf python3 python3-pip python3-venv cmake ninja-build ccache libffi-dev libssl-dev
 
+          # Clonar el repositorio de ESP-IDF (usamos v5.1.1, una versión estable)
+          git clone --depth 1 --branch v5.1.1 https://github.com/espressif/esp-idf.git $HOME/esp-idf
+
+          # Instalar toolchain y configurar el entorno
+          $HOME/esp-idf/install.sh
+          echo "IDF_PATH=$HOME/esp-idf" >> $GITHUB_ENV
+          echo "$HOME/esp-idf/export.sh" >> $GITHUB_ENV
+          
       # 3. Compila el firmware.
       - name: Build firmware (DragonJAR Badge)
         working-directory: firmware
-        run: idf.py build
+        run: |
+          # Cargar el entorno y compilar con idf.py
+          source $HOME/esp-idf/export.sh
+          idf.py build
 
       # 4. Sube los binarios resultantes
       - name: Upload firmware artifacts
