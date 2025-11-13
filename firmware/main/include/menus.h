@@ -12,6 +12,8 @@
 #include "catdos_module.h"
 #include "deauth_module.h"
 #include "display_settings.h"
+#include "deauthalizer_module.h" // Se crea en el paso 3
+#include "file_manager_module.h"
 #include "file_manager_module.h"
 #include "gps_module.h"
 #include "gps_screens.h"
@@ -46,6 +48,9 @@ typedef enum {
   MENU_WIFI_ANALIZER,
   MENU_WIFI_DEAUTH,
   MENU_WIFI_DOS,
+  MENU_WIFI_DEAUTHALIZER,
+  MENU_WIFI_DEAUTHALIZER_PAUSE,
+  MENU_WIFI_DEAUTHALIZER_STOP,
   /* WiFi analizer items */
   MENU_WIFI_ANALYZER_RUN,
   MENU_WIFI_ANALYZER_SETTINGS,
@@ -246,6 +251,32 @@ menu_t menus[] = {  //////////////////////////////////
      .on_exit_cb = NULL,
      .is_visible = true},
   #endif
+  #ifdef CONFIG_WIFI_APP_DEAUTH // Usamos la misma configuración que Deauth
+    {.display_name = "Deauthalizer", // Opción principal RUN
+     .menu_idx = MENU_WIFI_DEAUTHALIZER,
+     .parent_idx = MENU_WIFI_APPS,
+     .last_selected_submenu = 0,
+     .on_enter_cb = wifi_deauthalizer_start, // Función de inicio (definida en el nuevo módulo)
+     .on_exit_cb = NULL,
+     .is_visible = true},
+
+    {.display_name = "Pause/Resume", // Opción de Pausa
+     .menu_idx = MENU_WIFI_DEAUTHALIZER_PAUSE,
+     .parent_idx = MENU_WIFI_APPS,
+     .last_selected_submenu = 0,
+     .on_enter_cb = wifi_deauthalizer_toggle_pause, // Función de pausa/resumen
+  	  .on_exit_cb = NULL,
+  	  .is_visible = true},
+
+  	{.display_name = "Stop", // Opción de Parada
+  	  .menu_idx = MENU_WIFI_DEAUTHALIZER_STOP,
+  	  .parent_idx = MENU_WIFI_APPS,
+  	  .last_selected_submenu = 0,
+  	  .on_enter_cb = wifi_deauthalizer_stop, // Función de parada
+  	  .on_exit_cb = NULL,
+  	  .is_visible = true},
+  #endif
+  #ifdef CONFIG_WIFI_APP_DOS
   #ifdef CONFIG_WIFI_APP_DOS
     {.display_name = "DoS",
      .menu_idx = MENU_WIFI_DOS,
