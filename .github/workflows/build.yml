@@ -1,32 +1,33 @@
-name: Build DragonJAR Badge Firmware (ESP-IDF)
-
+name: Build DragonJAR Badge Firmware
 on:
   push:
     branches: [ main ]
-  pull_request:
-    branches: [ main ]
+  workflow_dispatch:
 
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
-      # 1️⃣ Descarga el código
-      - name: Checkout code
+      # 1. Checkout del código
+      - name: Checkout repository
         uses: actions/checkout@v4
 
-      # 2️⃣ Compila el firmware usando Espressif IDF
-      - name: Build firmware (ESP-IDF)
-        uses: espressif/esp-idf-ci-action@v1
+      # 2. Configura el entorno ESP-IDF (versión 5.1 estable)
+      - name: Setup ESP-IDF build environment
+        uses: espressif/setup-esp-idf@v1
         with:
-          esp_idf_version: release-v5.1
-          target: esp32
-          path: firmware   # 👈 ESTE es el parámetro correcto (antes era project_dir)
+          version: release-v5.1
 
-      # 3️⃣ Sube los binarios generados como artefactos
-      - name: Upload firmware artifacts
+      # 3. Compila el firmware. El 'path' apunta a donde está el CMakeLists.txt
+      #    Esta corrección evita el error de "CMakeLists.txt not found"
+      - name: Build firmware (DragonJAR Badge)
+        working-directory: firmware
+        run: idf.py build
+
+      # 4. Sube los binarios resultantes (el .bin)
+      - name: Upload build artifacts
         uses: actions/upload-artifact@v4
         with:
           name: dragonjar-firmware-bin
           path: firmware/build/*.bin
-
