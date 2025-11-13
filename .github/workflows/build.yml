@@ -15,11 +15,13 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      # 2. Configura el entorno ESP-IDF (¡CORRECCIÓN DEFINITIVA A IDFACTION!)
+      # 2. Configura el entorno ESP-IDF (¡CORRECCIÓN DEFINITIVA A setup-esp-idf!)
       - name: Setup ESP-IDF build environment
-        uses: espressif/idf-action@v1 # <--- Nombre más simple y robusto
+        uses: espressif/setup-esp-idf@v1 
         with:
           version: release-v5.1
+          # Aseguramos el target ESP32, ya que es la placa del badge
+          target: esp32 
 
       # 3. Compila el firmware.
       - name: Build firmware (DragonJAR Badge)
